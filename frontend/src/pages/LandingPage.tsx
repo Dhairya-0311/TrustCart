@@ -62,9 +62,9 @@ export default function LandingPage() {
           </p>
 
           {/* URL Input */}
-          <div className="w-full max-w-4xl mx-auto bg-white p-3 rounded-2xl shadow-elevated border border-outline-variant">
+          <div className="w-full max-w-4xl mx-auto glass-effect p-3 rounded-2xl shadow-elevated border border-white/30">
             <div className="flex flex-col md:flex-row gap-3">
-              <div className="flex-grow flex items-center bg-white rounded-xl border border-outline-variant px-5 focus-within:ring-2 focus-within:ring-secondary/40 transition-all group/input">
+              <div className="flex-grow flex items-center bg-white/20 rounded-xl border border-white/30 px-5 focus-within:ring-2 focus-within:ring-secondary/40 transition-all group/input bg-clip-padding backdrop-blur-md">
                 <span className="material-symbols-outlined text-outline text-[24px]">link</span>
                 <input
                   type="text"
@@ -114,7 +114,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── How It Works ── */}
-      <section id="how-it-works" className="py-28 bg-surface-container-low border-t border-outline-variant/40">
+      <section id="how-it-works" className="py-28 bg-white/10 backdrop-blur-md border-t border-outline-variant/40">
         <div className="max-w-[1440px] mx-auto px-6 md:px-12">
           <div className="mb-20 text-center">
             <h2 className="font-display text-headline-lg mb-4 text-on-background font-bold">How it Works</h2>
@@ -128,7 +128,7 @@ export default function LandingPage() {
             <div className="card p-8 flex flex-col justify-between group hover:border-secondary/35 transition-all duration-300">
               <div>
                 {/* High Fidelity Mockup */}
-                <div className="mb-8 w-full bg-slate-50 border border-outline-variant/40 rounded-xl p-5 h-[220px] flex flex-col justify-between shadow-sm relative overflow-hidden transition-all">
+                <div className="mb-8 w-full bg-white/20 backdrop-blur-md border border-white/30 rounded-xl p-5 h-[220px] flex flex-col justify-between shadow-sm relative overflow-hidden transition-all">
                   <div className="flex justify-between items-center pb-2 border-b border-outline-variant/30">
                     <span className="text-[12px] font-bold text-outline uppercase tracking-wider">Sentiment</span>
                     <div className="flex gap-1.5">
@@ -172,11 +172,11 @@ export default function LandingPage() {
             <div className="card p-8 flex flex-col justify-between group hover:border-secondary/35 transition-all duration-300">
               <div>
                 {/* High Fidelity Mockup */}
-                <div className="mb-8 w-full bg-slate-50 border border-outline-variant/40 rounded-xl p-5 h-[220px] flex gap-4 items-center justify-between shadow-sm relative overflow-hidden transition-all">
+                <div className="mb-8 w-full bg-white/20 backdrop-blur-md border border-white/30 rounded-xl p-5 h-[220px] flex gap-4 items-center justify-between shadow-sm relative overflow-hidden transition-all">
                   {/* Left: Log Rows */}
                   <div className="flex flex-col gap-2 w-1/3">
                     {[1, 2, 3].map((v) => (
-                      <div key={v} className="flex items-center gap-2 p-1.5 rounded bg-white border border-outline-variant/30">
+                      <div key={v} className="flex items-center gap-2 p-1.5 rounded bg-white/40 border border-white/20">
                         <span className="material-symbols-outlined text-[14px] text-secondary">database</span>
                         <div className="h-1.5 w-10 bg-outline/40 rounded-full" />
                       </div>
@@ -187,14 +187,14 @@ export default function LandingPage() {
                   <div className="absolute left-[33%] top-1/2 -translate-y-1/2 w-[8%] h-[2px] bg-gradient-to-r from-secondary-fixed-dim to-secondary" />
 
                   {/* Center: Document Sheet with Checked Mark */}
-                  <div className="w-1/3 bg-white border border-secondary rounded-xl p-3 flex flex-col items-center justify-center relative h-[85%]">
+                  <div className="w-1/3 bg-white/40 border border-secondary rounded-xl p-3 flex flex-col items-center justify-center relative h-[85%]">
                     <span className="material-symbols-outlined text-[38px] text-secondary">verified_user</span>
                     <div className="h-2 w-12 bg-outline-variant/30 rounded-full mt-2" />
                     <div className="h-1.5 w-10 bg-outline-variant/20 rounded-full mt-1.5" />
                   </div>
 
                   {/* Right: Small table */}
-                  <div className="w-1/3 bg-white border border-outline-variant/30 rounded-lg p-2 flex flex-col gap-1.5 text-[9px] font-mono">
+                  <div className="w-1/3 bg-white/40 border border-white/20 rounded-lg p-2 flex flex-col gap-1.5 text-[9px] font-mono">
                     <div className="flex justify-between border-b border-outline-variant/20 pb-1 text-outline font-bold uppercase">
                       <span>Run</span>
                       <span>Close</span>
@@ -223,7 +223,7 @@ export default function LandingPage() {
             <div className="card p-8 flex flex-col justify-between group hover:border-secondary/35 transition-all duration-300">
               <div>
                 {/* High Fidelity Mockup */}
-                <div className="mb-8 w-full bg-slate-50 border border-outline-variant/40 rounded-xl p-4 h-[220px] flex flex-col justify-between shadow-sm text-[10px] font-sans relative overflow-hidden transition-all">
+                <div className="mb-8 w-full bg-white/20 backdrop-blur-md border border-white/30 rounded-xl p-4 h-[220px] flex flex-col justify-between shadow-sm text-[10px] font-sans relative overflow-hidden transition-all">
                   {/* Header Tabs */}
                   <div className="flex gap-2 justify-end mb-1">
                     <span className="bg-secondary/10 text-secondary border border-secondary/20 rounded px-1.5 py-0.5 font-bold uppercase tracking-wider text-[8px]">Authentic</span>
@@ -237,7 +237,7 @@ export default function LandingPage() {
                       { name: 'Amazon.in', checked: true, price: '₹12,499', best: true },
                       { name: 'TrustCart', checked: true, price: '₹11,499', best: true }
                     ].map((item, i) => (
-                      <div key={i} className={`flex items-center justify-between p-1.5 rounded-lg border ${item.best ? 'border-secondary/40 bg-secondary/5' : 'border-outline-variant/20 bg-white'}`}>
+                      <div key={i} className={`flex items-center justify-between p-1.5 rounded-lg border ${item.best ? 'border-secondary/40 bg-secondary/10' : 'border-white/20 bg-white/30'}`}>
                         <div className="flex items-center gap-1.5">
                           <span className={`material-symbols-outlined text-[14px] ${item.checked ? 'text-secondary' : 'text-error'}`}>
                             {item.checked ? 'check_circle' : 'cancel'}
@@ -274,11 +274,11 @@ export default function LandingPage() {
       </section>
 
       {/* ── Trust Layers Showcase ── */}
-      <section className="py-28 bg-background">
+      <section className="py-28 bg-transparent">
         <div className="max-w-[1440px] mx-auto px-6 md:px-12 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
           {/* Visual Card - Price Comparison Engine */}
           <div className="relative order-2 lg:order-1 flex justify-center">
-            <div className="bg-white rounded-2xl border border-outline-variant p-8 shadow-elevated relative z-10 w-full max-w-[500px] transition-all">
+            <div className="glass-effect rounded-2xl p-8 shadow-elevated relative z-10 w-full max-w-[500px] transition-all">
               <div className="flex items-center justify-between mb-8 pb-4 border-b border-outline-variant/35">
                 <div>
                   <h4 className="font-display text-data-lg text-on-surface font-bold">Price Comparison Engine</h4>
@@ -294,7 +294,7 @@ export default function LandingPage() {
                   <div
                     key={item.platform}
                     className={`p-4 rounded-xl border flex items-center justify-between transition-all ${
-                      item.best ? 'border-secondary bg-secondary/5' : 'border-outline-variant/25 hover:bg-surface-container'
+                      item.best ? 'border-secondary bg-secondary/10' : 'border-white/20 hover:bg-white/30'
                     }`}
                   >
                     <div>
@@ -348,7 +348,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── CTA Section ── */}
-      <section className="py-28 bg-surface-container-low text-on-surface border-t border-outline-variant/30">
+      <section className="py-28 bg-white/10 backdrop-blur-md text-on-surface border-t border-outline-variant/30">
         <div className="max-w-[1440px] mx-auto px-6 md:px-12 text-center mb-16">
           <h2 className="font-display text-headline-lg mb-4 text-on-background font-bold">Stop The Guesswork. Start Verifying.</h2>
           <p className="text-on-surface-variant max-w-2xl mx-auto text-body-md">
@@ -398,7 +398,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── Final CTA ── */}
-      <section className="py-28 bg-background">
+      <section className="py-28 bg-transparent">
         <div className="max-w-[1440px] mx-auto px-6 md:px-12 text-center">
           <div className="max-w-3xl mx-auto space-y-8">
             <h2 className="font-display text-headline-lg text-on-background font-bold">Ready for the Truth?</h2>
@@ -412,7 +412,7 @@ export default function LandingPage() {
               >
                 Get Started Free
               </button>
-              <button className="bg-white border border-outline hover:bg-surface-container px-10 py-5 rounded-xl font-display text-body-md hover:text-primary transition-all active:scale-95 text-on-surface font-bold">
+              <button className="bg-white/20 border border-white/30 hover:bg-white/30 px-10 py-5 rounded-xl font-display text-body-md hover:text-primary transition-all active:scale-95 text-on-surface font-bold">
                 Watch Demo
               </button>
             </div>

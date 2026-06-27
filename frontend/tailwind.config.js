@@ -8,7 +8,7 @@ export default {
     extend: {
       colors: {
         // ── Stitch Design System (Material 3 Tokens) ──
-        'primary': '#000000',
+        'primary': '#0f172a',
         'on-primary': '#ffffff',
         'primary-container': '#131b2e',
         'on-primary-container': '#7c839b',
@@ -18,7 +18,7 @@ export default {
         'on-primary-fixed-variant': '#3f465c',
         'inverse-primary': '#bec6e0',
 
-        'secondary': '#006a61',
+        'secondary': '#0d9488',
         'on-secondary': '#ffffff',
         'secondary-container': '#86f2e4',
         'on-secondary-container': '#006f66',
@@ -27,7 +27,7 @@ export default {
         'on-secondary-fixed': '#00201d',
         'on-secondary-fixed-variant': '#005049',
 
-        'tertiary': '#000000',
+        'tertiary': '#3b82f6',
         'on-tertiary': '#ffffff',
         'tertiary-container': '#001a42',
         'on-tertiary-container': '#3980f4',

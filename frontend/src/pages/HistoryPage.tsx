@@ -134,7 +134,7 @@ export default function HistoryPage() {
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          <div className="flex items-center gap-2 bg-white border border-outline-variant px-3 py-2 rounded-lg">
+          <div className="flex items-center gap-2 bg-white/20 border border-white/30 px-3 py-2 rounded-lg backdrop-blur-md">
             <span className="material-symbols-outlined text-body-sm text-outline">filter_list</span>
             <select
               value={statusFilter}
@@ -167,7 +167,7 @@ export default function HistoryPage() {
         </div>
       ) : analyses.length === 0 ? (
         <div className="card p-12 text-center">
-          <div className="w-16 h-16 bg-surface-container-high rounded-full flex items-center justify-center mx-auto mb-4">
+          <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-white/30 backdrop-blur-md">
             <span className="material-symbols-outlined text-[32px] text-outline">history</span>
           </div>
           <h3 className="font-display text-data-lg text-primary mb-2">No History Yet</h3>
@@ -203,7 +203,7 @@ export default function HistoryPage() {
                     className={`w-10 h-10 flex items-center justify-center rounded-lg font-label-mono transition-colors ${
                       p === page
                         ? 'bg-primary text-white'
-                        : 'text-on-surface-variant hover:bg-surface-container'
+                        : 'text-on-surface-variant hover:bg-white/30'
                     }`}
                   >
                     {p}

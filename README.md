@@ -42,6 +42,12 @@ Paste any Amazon.in, Flipkart, Myntra, Meesho, Snapdeal, Nykaa, or Ajio product 
   <i>User Registration Interface</i>
 </p>
 
+<p align="center">
+  <img src="docs/screenshots/history.png" width="800" alt="Analysis History Page">
+  <br>
+  <i>Analysis History & Genuineness Gauge Records</i>
+</p>
+
 ---
 
 ## Tech Stack

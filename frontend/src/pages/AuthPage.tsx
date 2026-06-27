@@ -66,14 +66,14 @@ export default function AuthPage() {
         </div>
 
         {/* Form Card */}
-        <div className="bg-white rounded-xl border border-outline-variant p-8 shadow-card">
+        <div className="card p-8 shadow-card">
           {/* Tab Toggle */}
-          <div className="flex bg-surface-container rounded-lg p-1 mb-8">
+          <div className="flex bg-white/20 rounded-lg p-1 mb-8 border border-white/20 backdrop-blur-md">
             <button
               onClick={() => { setIsLogin(true); setError(''); }}
               className={`flex-1 py-2.5 rounded-md text-body-sm font-medium transition-all ${
                 isLogin
-                  ? 'bg-white text-primary shadow-sm font-bold'
+                  ? 'bg-white/40 text-primary shadow-sm font-bold border border-white/20 backdrop-blur-md'
                   : 'text-on-surface-variant hover:text-on-surface'
               }`}
             >
@@ -83,7 +83,7 @@ export default function AuthPage() {
               onClick={() => { setIsLogin(false); setError(''); }}
               className={`flex-1 py-2.5 rounded-md text-body-sm font-medium transition-all ${
                 !isLogin
-                  ? 'bg-white text-primary shadow-sm font-bold'
+                  ? 'bg-white/40 text-primary shadow-sm font-bold border border-white/20 backdrop-blur-md'
                   : 'text-on-surface-variant hover:text-on-surface'
               }`}
             >

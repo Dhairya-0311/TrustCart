@@ -68,7 +68,7 @@ export default function AlertsPage() {
           New Price Alert
         </h2>
         <form onSubmit={handleCreate} className="flex flex-col md:flex-row gap-4">
-          <div className="flex-grow flex items-center bg-surface-container-low rounded-lg border border-outline-variant px-4 focus-within:ring-2 focus-within:ring-secondary transition-all">
+          <div className="flex-grow flex items-center bg-white/20 rounded-lg border border-white/30 px-4 focus-within:ring-2 focus-within:ring-secondary transition-all backdrop-blur-md">
             <span className="material-symbols-outlined text-outline text-[20px]">link</span>
             <input
               type="text"
@@ -78,7 +78,7 @@ export default function AlertsPage() {
               className="w-full py-3.5 px-3 border-none bg-transparent focus:ring-0 focus:outline-none font-sans text-body-md text-on-surface placeholder-outline"
             />
           </div>
-          <div className="flex items-center bg-surface-container-low rounded-lg border border-outline-variant px-4 focus-within:ring-2 focus-within:ring-secondary transition-all w-full md:w-48">
+          <div className="flex items-center bg-white/20 rounded-lg border border-white/30 px-4 focus-within:ring-2 focus-within:ring-secondary transition-all w-full md:w-48 backdrop-blur-md">
             <span className="text-outline font-bold">₹</span>
             <input
               type="number"
@@ -128,7 +128,7 @@ export default function AlertsPage() {
         </div>
       ) : alerts.length === 0 ? (
         <div className="card p-12 text-center">
-          <div className="w-16 h-16 bg-surface-container-high rounded-full flex items-center justify-center mx-auto mb-4">
+          <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-white/30 backdrop-blur-md">
             <span className="material-symbols-outlined text-[32px] text-outline">notifications_off</span>
           </div>
           <h3 className="font-display text-data-lg text-primary mb-2">No Alerts</h3>
@@ -142,7 +142,7 @@ export default function AlertsPage() {
             <div key={alert.id} className="card p-6 flex flex-col md:flex-row items-start md:items-center gap-6 hover:shadow-card-hover transition-shadow">
               {/* Icon */}
               <div className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 ${
-                alert.triggered ? 'bg-secondary-container' : 'bg-surface-container-high'
+                alert.triggered ? 'bg-secondary-container' : 'bg-white/20 border border-white/30 backdrop-blur-md'
               }`}>
                 <span className={`material-symbols-outlined ${alert.triggered ? 'text-on-secondary-container' : 'text-on-surface-variant'}`}>
                   {alert.triggered ? 'notifications_active' : 'notifications'}
@@ -179,7 +179,7 @@ export default function AlertsPage() {
                 )}
                 <button
                   onClick={() => handleDelete(alert.id)}
-                  className="p-2 hover:bg-error-container rounded-lg transition-colors"
+                  className="p-2 hover:bg-error/10 rounded-lg transition-colors"
                   title="Delete alert"
                 >
                   <span className="material-symbols-outlined text-error text-[20px]">delete</span>

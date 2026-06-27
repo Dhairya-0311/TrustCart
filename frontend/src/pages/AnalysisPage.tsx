@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import { useAnalysis } from '../hooks/useAnalysis';
@@ -35,14 +35,14 @@ function getScoreEmoji(score: number) {
 function GenuinenessGauge({ score }: { score: number }) {
   const strokeDasharray = `${(score / 100) * 125.6}, 125.6`;
   return (
-    <div className="gauge-container w-[280px] h-[140px] mx-auto">
+    <div className="gauge-container w-[280px] h-[140px] mx-auto relative">
       <svg className="w-full" viewBox="0 0 100 50">
         <path className="fill-none stroke-surface-container" strokeWidth="12" d="M 10 50 A 40 40 0 0 1 90 50" />
         <path className={`fill-none ${getScoreColor(score)}`} strokeWidth="12" strokeLinecap="round" d="M 10 50 A 40 40 0 0 1 90 50" strokeDasharray={strokeDasharray} />
       </svg>
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 text-center">
-        <span className="font-display text-display-lg">{score}%</span>
-        <p className={`text-body-sm font-medium ${getScoreTextColor(score)}`}>{getScoreLabel(score)} {getScoreEmoji(score)}</p>
+      <div className="absolute bottom-2 left-1/2 -translate-x-1/2 text-center flex flex-col items-center">
+        <span className="font-display text-4xl font-extrabold leading-none text-on-surface">{score}%</span>
+        <p className={`text-xs font-bold ${getScoreTextColor(score)} mt-1`}>{getScoreLabel(score)} {getScoreEmoji(score)}</p>
       </div>
     </div>
   );
@@ -51,7 +51,7 @@ function GenuinenessGauge({ score }: { score: number }) {
 function PriceRow({ comparison, isBest }: { comparison: PriceComparison; isBest: boolean }) {
   const platformAbbr = comparison.platform?.substring(0, 3).toUpperCase() || '???';
   return (
-    <tr className={`${isBest ? 'bg-secondary/5' : 'hover:bg-surface transition-colors'}`}>
+    <tr className={`${isBest ? 'bg-secondary/15 border-b border-white/20' : 'hover:bg-white/20 transition-colors border-b border-white/20'}`}>
       <td className="px-6 py-4">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded bg-surface-container-highest flex items-center justify-center font-bold text-[10px]">
@@ -88,41 +88,172 @@ function PriceRow({ comparison, isBest }: { comparison: PriceComparison; isBest:
   );
 }
 
-function ProcessingView({ progress, step }: { progress: number; step: string }) {
+const animationStyles = `
+  @keyframes spin-custom {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  @keyframes pulse-custom {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.05); opacity: 0.8; }
+  }
+  @keyframes shimmer-bg {
+    0% { background-color: rgba(0, 198, 167, 0.01); }
+    50% { background-color: rgba(0, 198, 167, 0.06); }
+    100% { background-color: rgba(0, 198, 167, 0.01); }
+  }
+  @keyframes dots {
+    0% { content: ""; }
+    25% { content: "."; }
+    50% { content: ".."; }
+    75% { content: "..."; }
+    100% { content: ""; }
+  }
+  .animate-spin-custom {
+    animation: spin-custom 2s linear infinite;
+  }
+  .animate-pulse-custom {
+    animation: pulse-custom 1.5s ease-in-out infinite;
+  }
+  .shimmer-active {
+    animation: shimmer-bg 3s infinite ease-in-out;
+  }
+  .dots-anim::after {
+    display: inline-block;
+    animation: dots 1.5s infinite steps(4);
+    content: "";
+    width: 24px;
+    text-align: left;
+  }
+`;
+
+function ProcessingView({
+  serverStatus,
+  onComplete,
+}: {
+  serverStatus: string | undefined;
+  onComplete: () => void;
+}) {
+  const [progress, setProgress] = useState(0);
+  const [isComplete, setIsComplete] = useState(false);
+
+  useEffect(() => {
+    if (isComplete) return;
+
+    const timer = setInterval(() => {
+      setProgress((prev) => {
+        if (prev < 99) {
+          return prev + 1;
+        }
+        
+        // Hold at 99% if the backend is not finished yet
+        if (serverStatus === 'COMPLETED') {
+          clearInterval(timer);
+          return 100;
+        }
+        
+        if (serverStatus === 'FAILED') {
+          clearInterval(timer);
+          return prev;
+        }
+
+        return prev;
+      });
+    }, 40);
+
+    return () => clearInterval(timer);
+  }, [serverStatus, isComplete]);
+
+  useEffect(() => {
+    if (progress === 100 && !isComplete) {
+      setIsComplete(true);
+      const timeout = setTimeout(() => {
+        onComplete();
+      }, 800);
+      return () => clearTimeout(timeout);
+    }
+  }, [progress, isComplete, onComplete]);
+
+  // Determine currentStep based on progress
+  let currentStep = 0;
+  if (progress >= 100) currentStep = 4;
+  else if (progress >= 90) currentStep = 3;
+  else if (progress >= 60) currentStep = 2;
+  else if (progress >= 30) currentStep = 1;
+
+  const steps = [
+    { label: 'Scraping', icon: 'psychology' },
+    { label: 'Reviews', icon: 'rate_review' },
+    { label: 'Prices', icon: 'attach_money' },
+    { label: 'Verdict', icon: 'gavel' },
+  ];
+
   return (
     <div className="max-w-[1280px] mx-auto px-gutter py-20">
-      <div className="card p-12 text-center max-w-2xl mx-auto">
-        <div className="w-20 h-20 bg-secondary-container rounded-full flex items-center justify-center mx-auto mb-6">
-          <span className="material-symbols-outlined text-[40px] text-on-secondary-container animate-pulse">analytics</span>
+      <style>{animationStyles}</style>
+      <div className={`card p-12 text-center max-w-2xl mx-auto transition-all duration-500 border border-white/30 ${
+        !isComplete ? 'shimmer-active animate-pulse-custom' : 'bg-white/40 backdrop-blur-md'
+      }`}>
+        <div className={`w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 transition-all duration-500 ${
+          isComplete ? 'bg-secondary text-white' : 'bg-secondary-container text-on-secondary-container'
+        }`}>
+          <span className={`material-symbols-outlined text-[40px] ${
+            isComplete ? '' : 'animate-spin-custom'
+          }`}>
+            {isComplete ? 'check' : 'analytics'}
+          </span>
         </div>
-        <h2 className="font-display text-headline-lg text-on-surface mb-4">Analyzing Product...</h2>
-        <p className="text-on-surface-variant text-body-md mb-8">{step || 'Starting analysis pipeline'}</p>
+        <h2 className={`font-display text-headline-lg mb-2 transition-all duration-500 ${
+          isComplete ? 'text-secondary font-bold' : 'text-on-surface'
+        }`}>
+          {isComplete ? (
+            <span>Analysis Complete ✓</span>
+          ) : (
+            <span className="dots-anim">Analyzing Product</span>
+          )}
+        </h2>
+        <p className="text-on-surface-variant text-body-md mb-8">
+          {isComplete ? 'All data aggregated successfully' : 'Please wait while we audit the product details'}
+        </p>
 
         {/* Progress bar */}
-        <div className="w-full h-3 bg-surface-container rounded-full overflow-hidden mb-4">
+        <div className="w-full h-3 bg-surface-container rounded-full overflow-hidden mb-4 relative">
           <div
-            className="h-full bg-secondary rounded-full transition-all duration-700 ease-out"
-            style={{ width: `${progress}%` }}
+            className="h-full rounded-full transition-all duration-300 ease-out"
+            style={{
+              width: `${progress}%`,
+              background: 'linear-gradient(90deg, #00C6A7 0%, #007A65 100%)',
+            }}
           />
         </div>
         <p className="font-label-mono text-label-mono text-outline">{progress}% COMPLETE</p>
 
         {/* Steps */}
         <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
-          {[
-            { label: 'Scraping', icon: 'psychology', threshold: 10 },
-            { label: 'Reviews', icon: 'rate_review', threshold: 30 },
-            { label: 'Prices', icon: 'attach_money', threshold: 55 },
-            { label: 'Verdict', icon: 'gavel', threshold: 85 },
-          ].map((s) => (
-            <div key={s.label} className={`p-3 rounded-lg border ${progress >= s.threshold ? 'border-secondary bg-secondary/5' : 'border-outline-variant bg-surface-container'
-              }`}>
-              <span className={`material-symbols-outlined text-[20px] ${progress >= s.threshold ? 'text-secondary' : 'text-outline'}`}>
-                {progress >= s.threshold ? 'check_circle' : s.icon}
-              </span>
-              <p className="text-label-mono mt-1">{s.label}</p>
-            </div>
-          ))}
+          {steps.map((s, idx) => {
+            let badgeClass = 'border-white/20 bg-white/20 backdrop-blur-md text-outline';
+            let iconName = s.icon;
+            let iconClass = 'text-outline';
+
+            if (idx < currentStep) {
+              badgeClass = 'border-secondary bg-secondary text-white font-bold';
+              iconName = 'check_circle';
+              iconClass = 'text-white';
+            } else if (idx === currentStep) {
+              badgeClass = 'border-secondary bg-secondary/10 text-secondary font-bold';
+              iconName = 'sync';
+              iconClass = 'text-secondary animate-spin-custom';
+            }
+
+            return (
+              <div key={s.label} className={`p-4 rounded-lg border transition-all duration-500 flex flex-col items-center justify-center gap-2 ${badgeClass}`}>
+                <span className={`material-symbols-outlined text-[24px] ${iconClass}`}>
+                  {iconName}
+                </span>
+                <p className="text-label-mono text-xs">{s.label}</p>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>
@@ -135,6 +266,16 @@ export default function AnalysisPage() {
   const { data: analysisData, isLoading: analysisLoading } = useAnalysis(id!);
   const { data: statusData } = useAnalysisStatus(id!, true);
   const { data: pricesData } = usePriceComparisons(id!);
+  const [animationFinished, setAnimationFinished] = useState(false);
+
+  const analysis: Analysis | undefined = analysisData?.data?.analysis;
+
+  useEffect(() => {
+    // Skip loading animation if analysis is already completed or failed
+    if (analysis && (analysis.status === 'COMPLETED' || analysis.status === 'FAILED')) {
+      setAnimationFinished(true);
+    }
+  }, [analysis]);
 
   useEffect(() => {
     if (statusData?.status === 'COMPLETED' || statusData?.status === 'FAILED') {
@@ -143,7 +284,6 @@ export default function AnalysisPage() {
     }
   }, [statusData?.status, id, queryClient]);
 
-  const analysis: Analysis | undefined = analysisData?.data?.analysis;
   const prices: PriceComparison[] = pricesData?.data?.comparisons || analysis?.price_comparisons || [];
   const reviews = analysis?.reviews?.[0];
 
@@ -174,12 +314,28 @@ export default function AnalysisPage() {
     );
   }
 
-  // Show processing view
-  if (analysis.status === 'PROCESSING' || analysis.status === 'PENDING') {
+  // Show processing view or error view if analysis failed
+  const currentStatus = statusData?.status || analysis.status;
+  if (currentStatus === 'FAILED') {
+    return (
+      <div className="max-w-[1280px] mx-auto px-gutter py-20 text-center">
+        <span className="material-symbols-outlined text-[48px] text-error mb-4">error</span>
+        <h2 className="font-display text-headline-lg text-on-surface">Analysis Failed</h2>
+        <p className="text-on-surface-variant text-body-md mt-2">
+          An unexpected error occurred while analyzing this product.
+        </p>
+        <Link to="/dashboard" className="mt-6 inline-flex text-secondary font-bold hover:underline">
+          Back to Dashboard
+        </Link>
+      </div>
+    );
+  }
+
+  if (!animationFinished) {
     return (
       <ProcessingView
-        progress={statusData?.progress_pct ?? 0}
-        step={statusData?.step ?? 'Initializing...'}
+        serverStatus={currentStatus}
+        onComplete={() => setAnimationFinished(true)}
       />
     );
   }
@@ -206,7 +362,7 @@ export default function AnalysisPage() {
 
         {/* Product Card */}
         <div className="lg:col-span-8 card overflow-hidden flex flex-col md:flex-row">
-          <div className="md:w-2/5 relative min-h-[300px] bg-surface-container-low">
+          <div className="md:w-2/5 relative min-h-[300px] bg-white/20 backdrop-blur-sm">
             {analysis.product_image ? (
               <img src={analysis.product_image} alt={analysis.product_name || 'Product'} className="w-full h-full object-cover" />
             ) : (
@@ -219,7 +375,7 @@ export default function AnalysisPage() {
           <div className="md:w-3/5 p-8 flex flex-col justify-between">
             <div>
               <div className="flex items-center gap-2 mb-2">
-                <span className="font-label-mono text-label-mono bg-surface-container-high px-2 py-0.5 rounded text-primary uppercase">{analysis.platform}</span>
+                <span className="font-label-mono text-label-mono bg-white/25 border border-white/25 px-2 py-0.5 rounded text-primary uppercase">{analysis.platform}</span>
               </div>
               <h2 className="font-display text-headline-lg mb-4 text-on-surface">
                 {analysis.product_name || 'Unknown Product'}
@@ -281,7 +437,7 @@ export default function AnalysisPage() {
                 </div>
               </div>
               <div className="mt-8 pt-6 border-t border-outline-variant">
-                <div className="flex items-center gap-3 text-on-surface-variant bg-surface-container-low p-4 rounded-lg">
+                <div className="flex items-center gap-3 text-on-surface-variant bg-white/20 border border-white/25 p-4 rounded-lg backdrop-blur-md">
                   <span className="material-symbols-outlined text-secondary">security_update_good</span>
                   <p className="text-body-sm">AI analysis has filtered {reviews.fake_review_count} suspicious reviews from the total score.</p>
                 </div>
@@ -302,7 +458,7 @@ export default function AnalysisPage() {
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="bg-surface-container-low">
+                  <tr className="bg-white/20 backdrop-blur-md border-b border-white/25">
                     <th className="px-6 py-4 text-body-sm font-bold text-outline uppercase tracking-wider">Retailer</th>
                     <th className="px-6 py-4 text-body-sm font-bold text-outline uppercase tracking-wider">Availability</th>
                     <th className="px-6 py-4 text-body-sm font-bold text-outline uppercase tracking-wider">Price</th>
@@ -327,7 +483,7 @@ export default function AnalysisPage() {
       </section>
 
       {/* ── Verification Methodology ── */}
-      <section className="bg-surface-container-low rounded-xl border border-outline-variant p-8 flex flex-col md:flex-row items-center justify-between gap-8">
+      <section className="glass-effect rounded-xl p-8 flex flex-col md:flex-row items-center justify-between gap-8 border border-white/30">
         <div className="md:w-1/2">
           <h4 className="font-display text-headline-lg mb-4 text-on-surface">Verification Methodology</h4>
           <p className="text-body-md text-on-surface-variant mb-4">
@@ -342,7 +498,7 @@ export default function AnalysisPage() {
             ))}
           </div>
         </div>
-        <div className="md:w-1/3 w-full bg-white p-6 rounded-lg border border-outline-variant shadow-sm">
+        <div className="md:w-1/3 w-full bg-white/20 p-6 rounded-lg border border-white/30 shadow-sm backdrop-blur-md">
           <p className="font-label-mono text-label-mono text-outline mb-4">DATA SOURCE TRANSPARENCY</p>
           <ul className="space-y-3">
             <li className="flex justify-between items-center text-body-sm">

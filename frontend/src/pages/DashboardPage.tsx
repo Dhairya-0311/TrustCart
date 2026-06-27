@@ -152,10 +152,10 @@ export default function DashboardPage() {
       </div>
 
       {/* URL Input Card */}
-      <div className="bg-white rounded-xl border border-outline-variant p-8 shadow-card mb-12">
+      <div className="card p-8 shadow-card mb-12">
         <h2 className="font-display text-data-lg text-on-surface mb-4">New Verification</h2>
         <div className="flex flex-col md:flex-row gap-3">
-          <div className="flex-grow flex items-center bg-surface-container-low rounded-lg border border-outline-variant px-4 focus-within:ring-2 focus-within:ring-secondary transition-all">
+          <div className="flex-grow flex items-center bg-white/20 rounded-lg border border-white/30 px-4 focus-within:ring-2 focus-within:ring-secondary transition-all backdrop-blur-md">
             <span className="material-symbols-outlined text-outline">link</span>
             <input
               type="text"
@@ -213,7 +213,7 @@ export default function DashboardPage() {
         </div>
       ) : analyses.length === 0 ? (
         <div className="card p-12 text-center">
-          <div className="w-16 h-16 bg-surface-container-high rounded-full flex items-center justify-center mx-auto mb-4">
+          <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-white/30 backdrop-blur-md">
             <span className="material-symbols-outlined text-[32px] text-outline">analytics</span>
           </div>
           <h3 className="font-display text-data-lg text-primary mb-2">No Analyses Yet</h3>

@@ -57,7 +57,7 @@ export default function Navbar() {
           {isAuthenticated ? (
             <>
               {/* Search */}
-              <div className="hidden sm:flex items-center bg-surface-container border border-outline-variant rounded-xl px-5 py-3 shadow-sm hover:shadow-[0_0_15px_rgba(0,106,97,0.15)] focus-within:shadow-[0_0_20px_rgba(0,106,97,0.3)] focus-within:border-secondary transition-all duration-300 group/search">
+              <div className="hidden sm:flex items-center bg-white/20 backdrop-blur-md border border-white/30 rounded-xl px-5 py-3 shadow-sm hover:shadow-[0_0_15px_rgba(0,106,97,0.15)] focus-within:shadow-[0_0_20px_rgba(0,106,97,0.3)] focus-within:border-secondary transition-all duration-300 group/search">
                 <span className="material-symbols-outlined text-outline text-[26px] transition-all duration-300 group-hover/search:scale-125 group-hover/search:text-primary group-hover/search:drop-shadow-[0_0_8px_rgba(0,106,97,0.6)] cursor-pointer">search</span>
                 <input
                   type="text"
@@ -67,35 +67,35 @@ export default function Navbar() {
               </div>
 
               {/* Notifications */}
-              <button className="p-2 hover:bg-surface-container-high rounded-full transition-colors flex items-center justify-center">
+              <button className="p-2 hover:bg-white/20 rounded-full transition-colors flex items-center justify-center">
                 <span className="material-symbols-outlined text-on-surface-variant text-[30px]">notifications</span>
               </button>
 
               {/* User Menu */}
               <div className="relative group">
-                <button className="flex items-center gap-2 p-2 hover:bg-surface-container-high rounded-full transition-colors flex items-center justify-center">
+                <button className="flex items-center gap-2 p-2 hover:bg-white/20 rounded-full transition-colors flex items-center justify-center">
                   <span className="material-symbols-outlined text-on-surface-variant text-[30px]">account_circle</span>
                 </button>
-                <div className="absolute right-0 top-full mt-2 w-64 bg-white border border-outline-variant rounded-xl shadow-elevated py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                <div className="absolute right-0 top-full mt-2 w-64 bg-white/70 backdrop-blur-xl border border-white/30 rounded-xl shadow-card py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                   <div className="px-5 py-3 border-b border-outline-variant">
                     <p className="text-body-md font-bold text-on-surface truncate">{user?.name || user?.email}</p>
                     <p className="text-label-mono text-outline">{user?.plan} Plan</p>
                   </div>
                   <Link
                     to="/dashboard"
-                    className="block px-5 py-3 text-body-md text-on-surface-variant hover:bg-surface-container hover:text-primary transition-colors"
+                    className="block px-5 py-3 text-body-md text-on-surface-variant hover:bg-white/30 hover:text-primary transition-colors"
                   >
                     Dashboard
                   </Link>
                   <Link
                     to="/history"
-                    className="block px-5 py-3 text-body-md text-on-surface-variant hover:bg-surface-container hover:text-primary transition-colors"
+                    className="block px-5 py-3 text-body-md text-on-surface-variant hover:bg-white/30 hover:text-primary transition-colors"
                   >
                     History
                   </Link>
                   <button
                     onClick={logout}
-                    className="w-full text-left px-5 py-3 text-body-md text-error hover:bg-error-container transition-colors"
+                    className="w-full text-left px-5 py-3 text-body-md text-error hover:bg-error/10 transition-colors"
                   >
                     Sign Out
                   </button>
