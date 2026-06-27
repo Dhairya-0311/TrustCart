@@ -15,7 +15,25 @@ Paste any Amazon.in, Flipkart, Myntra, Meesho, Snapdeal, Nykaa, or Ajio product 
 <p align="center">
   <img src="docs/screenshots/landing_page.png" width="800" alt="TrustCart Landing Page">
   <br>
-  <i>TrustCart Landing Page & Search Dashboard</i>
+  <i>TrustCart Landing Page & Search Bar</i>
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/dashboard.png" width="800" alt="User Dashboard">
+  <br>
+  <i>User Dashboard & Recent Audits</i>
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/analysis_result.png" width="800" alt="Analysis Result Overview">
+  <br>
+  <i>Product Authenticity Scoring & AI Analysis</i>
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/price_comparison.png" width="800" alt="Review & Price Comparison Details">
+  <br>
+  <i>Heuristic Review Metrics & Cross-Platform Price Tracking</i>
 </p>
 
 <p align="center">
