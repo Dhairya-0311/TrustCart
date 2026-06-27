@@ -1,0 +1,98 @@
+[
+  {
+    "name": "QuickDealz India",
+    "platform": "AMAZON",
+    "seller_id": "A2QUICKDEALZ01",
+    "reason": "Multiple counterfeit electronics complaints; suspended and re-registered under new name",
+    "category": "electronics",
+    "risk_level": "HIGH"
+  },
+  {
+    "name": "BestBuy Electronics Hub",
+    "platform": "AMAZON",
+    "seller_id": "A3BESTBUYEH02",
+    "reason": "Fake Apple and Samsung accessories sold as originals; FDA warnings on beauty products",
+    "category": "electronics",
+    "risk_level": "HIGH"
+  },
+  {
+    "name": "GlamourGlow Beauty",
+    "platform": "AMAZON",
+    "seller_id": "A1GLAMGLOW03",
+    "reason": "Counterfeit beauty products reported; fake MAC and Maybelline items",
+    "category": "beauty",
+    "risk_level": "HIGH"
+  },
+  {
+    "name": "MegaDeals24x7",
+    "platform": "AMAZON",
+    "seller_id": "A2MEGADEAL04",
+    "reason": "Price inflation before sales events; misleading MRP tags",
+    "category": "general",
+    "risk_level": "MEDIUM"
+  },
+  {
+    "name": "TechWorld Official",
+    "platform": "AMAZON",
+    "seller_id": "A3TECHWORLD05",
+    "reason": "Refurbished items sold as new; warranty cards missing or forged",
+    "category": "electronics",
+    "risk_level": "HIGH"
+  },
+  {
+    "name": "SuperSaver Bazaar",
+    "platform": "FLIPKART",
+    "seller_id": "FK_SUPERSAVER06",
+    "reason": "High return rate >40%; multiple product-not-as-described complaints",
+    "category": "general",
+    "risk_level": "MEDIUM"
+  },
+  {
+    "name": "GadgetKing Store",
+    "platform": "FLIPKART",
+    "seller_id": "FK_GADGETKING07",
+    "reason": "Counterfeit Boat and JBL earphones; fake BIS certification labels",
+    "category": "electronics",
+    "risk_level": "HIGH"
+  },
+  {
+    "name": "FashionFirst India",
+    "platform": "FLIPKART",
+    "seller_id": "FK_FASHFIRST08",
+    "reason": "Replica branded clothing sold as genuine; fake tags and packaging",
+    "category": "fashion",
+    "risk_level": "HIGH"
+  },
+  {
+    "name": "HealthPlus Essentials",
+    "platform": "FLIPKART",
+    "seller_id": "FK_HEALTHPLUS09",
+    "reason": "Expired or near-expiry supplements; tampered seals on health products",
+    "category": "health",
+    "risk_level": "HIGH"
+  },
+  {
+    "name": "DealHunter Pro",
+    "platform": "FLIPKART",
+    "seller_id": "FK_DEALHUNT10",
+    "reason": "Consistent review manipulation; suspected paid review network",
+    "category": "general",
+    "risk_level": "MEDIUM"
+  },
+  {
+    "name": "PremiumTech Solutions",
+    "platform": "AMAZON",
+    "seller_id": "A1PREMTECH11",
+    "reason": "Fake OnePlus and Xiaomi chargers; electrical safety hazard reports",
+    "category": "electronics",
+    "risk_level": "HIGH"
+  },
+  {
+    "name": "SkinGlow Naturals",
+    "platform": "AMAZON",
+    "seller_id": "A2SKINGLOW12",
+    "reason": "Unregistered cosmetic products; harmful ingredients found in lab tests",
+    "category": "beauty",
+    "risk_level": "HIGH"
+  }
+]

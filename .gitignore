@@ -1,0 +1,38 @@
+# Root .gitignore for TrustCart monorepo
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# Environment files
+.env
+.env.local
+.env.production
+
+# Build outputs
+dist/
+build/
+*.tsbuildinfo
+
+# Prisma generated
+backend/prisma/migrations/*.db
+
+# Logs
+logs/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/settings.json
+.idea/
+
+# Playwright
+backend/playwright-report/
+backend/test-results/
+
+# Coverage
+coverage/
