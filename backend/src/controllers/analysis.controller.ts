@@ -62,7 +62,7 @@ export async function getAnalysis(
 ) {
   try {
     const analysis = await analysisService.getAnalysis(
-      req.params.id,
+      req.params.id as string,
       req.user!.id
     );
 
@@ -85,7 +85,7 @@ export async function getAnalysisStatus(
 ) {
   try {
     const status = await analysisService.getAnalysisStatus(
-      req.params.id,
+      req.params.id as string,
       req.user!.id
     );
 
@@ -108,7 +108,7 @@ export async function deleteAnalysis(
 ) {
   try {
     const result = await analysisService.deleteAnalysis(
-      req.params.id,
+      req.params.id as string,
       req.user!.id
     );
 
@@ -131,7 +131,7 @@ export async function getReviewBreakdown(
 ) {
   try {
     const result = await analysisService.getReviewBreakdown(
-      req.params.id,
+      req.params.id as string,
       req.user!.id
     );
 
@@ -154,7 +154,7 @@ export async function getPriceComparisons(
 ) {
   try {
     const result = await analysisService.getPriceComparisons(
-      req.params.id,
+      req.params.id as string,
       req.user!.id
     );
 

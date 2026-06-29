@@ -12,6 +12,7 @@ yarn-error.log*
 
 # Build outputs
 dist/
+!backend/dist/
 build/
 *.tsbuildinfo
 
@@ -36,3 +37,7 @@ backend/test-results/
 
 # Coverage
 coverage/
+
+# Machine Learning
+fake_reviews_dataset.csv
+ml/fake_reviews_dataset.csv

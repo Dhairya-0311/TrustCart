@@ -65,7 +65,7 @@ export async function deleteAlert(
 ) {
   try {
     const alert = await prisma.priceAlert.findUnique({
-      where: { id: req.params.id },
+      where: { id: req.params.id as string },
     });
 
     if (!alert) {
@@ -77,7 +77,7 @@ export async function deleteAlert(
     }
 
     await prisma.priceAlert.delete({
-      where: { id: req.params.id },
+      where: { id: req.params.id as string },
     });
 
     res.status(200).json({

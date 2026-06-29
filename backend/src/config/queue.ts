@@ -10,7 +10,7 @@ let analysisQueue: Queue | null = null;
 export function getAnalysisQueue(): Queue {
   if (!analysisQueue) {
     analysisQueue = new Queue(ANALYSIS_QUEUE_NAME, {
-      connection: createBullMQConnection(),
+      connection: createBullMQConnection() as any,
       defaultJobOptions: {
         attempts: 2,
         backoff: {
@@ -36,10 +36,11 @@ export function getAnalysisQueue(): Queue {
 // Create queue events listener (for monitoring)
 let queueEvents: QueueEvents | null = null;
 
+// Create queue events
 export function getQueueEvents(): QueueEvents {
   if (!queueEvents) {
     queueEvents = new QueueEvents(ANALYSIS_QUEUE_NAME, {
-      connection: createBullMQConnection(),
+      connection: createBullMQConnection() as any,
     });
   }
   return queueEvents;
@@ -50,7 +51,7 @@ export function createAnalysisWorker(
   processor: (job: any) => Promise<any>
 ): Worker {
   const worker = new Worker(ANALYSIS_QUEUE_NAME, processor, {
-    connection: createBullMQConnection(),
+    connection: createBullMQConnection() as any,
     concurrency: 3,
     stalledInterval: 30000, // 30s stalled check
     limiter: {
