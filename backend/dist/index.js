@@ -144138,7 +144138,7 @@ var import_express2 = __toESM(require_express2());
 var import_bullmq = __toESM(require_cjs());
 var ANALYSIS_QUEUE_NAME = "analysis-queue";
 var analysisQueue = null;
-function getAnalysisQueue() {
+function getAnalysisQueue2() {
   if (!analysisQueue) {
     analysisQueue = new import_bullmq.Queue(ANALYSIS_QUEUE_NAME, {
       connection: createBullMQConnection(),
@@ -144191,7 +144191,7 @@ router2.get("/", async (_req, res) => {
     health.status = "degraded";
   }
   try {
-    const queue = getAnalysisQueue();
+    const queue = getAnalysisQueue2();
     const waiting = await queue.getWaitingCount();
     const active = await queue.getActiveCount();
     health.queue = `active: ${active}, waiting: ${waiting}`;

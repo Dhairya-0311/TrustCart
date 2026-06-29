@@ -1,5 +1,4 @@
 import { prisma } from '../config/database';
-import { getAnalysisQueue } from '../config/queue';
 import { getRedisClient } from '../config/redis';
 import { detectPlatform } from '../utils/platformDetector';
 import { ValidationError, NotFoundError, ForbiddenError } from '../middleware/error.middleware';
