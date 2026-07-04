@@ -1,40 +1,43 @@
-import Redis from 'ioredis';
+﻿import Redis from 'ioredis';
 import { env } from './env';
 
-// Redis client singleton
 let redis: Redis | null = null;
 
 export function getRedisClient(): Redis {
   if (!redis) {
     redis = new Redis(env.REDIS_URL, {
-      maxRetriesPerRequest: null, // Required for BullMQ
+      maxRetriesPerRequest: null,
       enableReadyCheck: false,
+      connectTimeout: 5000,
       retryStrategy(times: number) {
-        const delay = Math.min(times * 50, 2000);
-        return delay;
+        if (times > 5) return null;
+        return Math.min(times * 200, 2000);
       },
     });
 
     redis.on('connect', () => {
-      console.log('✅ Redis connected successfully');
+      console.log('Redis connected successfully');
     });
 
     redis.on('error', (err) => {
-      console.error('❌ Redis connection error:', err.message);
+      console.error('Redis connection error:', err.message);
     });
   }
-
   return redis;
 }
 
 export async function connectRedis(): Promise<void> {
   const client = getRedisClient();
   try {
-    await client.ping();
-    console.log('✅ Redis ping successful');
+    await Promise.race([
+      client.ping(),
+      new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Redis ping timeout')), 5000)
+      ),
+    ]);
+    console.log('Redis ping successful');
   } catch (error) {
-    console.error('❌ Redis connection failed:', error);
-    // Don't exit — Redis is optional for basic functionality
+    console.error('Redis connection failed (continuing without Redis):', error);
   }
 }
 
@@ -42,14 +45,14 @@ export async function disconnectRedis(): Promise<void> {
   if (redis) {
     await redis.quit();
     redis = null;
-    console.log('📦 Redis disconnected');
+    console.log('Redis disconnected');
   }
 }
 
-// Helper to create a separate Redis connection for BullMQ (it needs its own)
 export function createBullMQConnection(): Redis {
   return new Redis(env.REDIS_URL, {
     maxRetriesPerRequest: null,
     enableReadyCheck: false,
+    connectTimeout: 5000,
   });
 }

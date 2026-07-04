@@ -1,4 +1,4 @@
-import app from './app';
+﻿import app from './app';
 import { env } from './config/env';
 import { connectDatabase, disconnectDatabase } from './config/database';
 import { connectRedis, disconnectRedis } from './config/redis';
@@ -6,32 +6,27 @@ import { logger } from './utils/logger';
 
 async function bootstrap() {
   try {
-    // Connect to database
     await connectDatabase();
 
-    // Connect to Redis
-    await connectRedis();
-
-    // Start HTTP server
     const server = app.listen(env.PORT, () => {
-      logger.info(`🚀 TrustCart API running on port ${env.PORT}`);
-      logger.info(`📚 API Docs: http://localhost:${env.PORT}/api/v1/docs`);
-      logger.info(`🔍 Health: http://localhost:${env.PORT}/api/v1/health`);
-      logger.info(`🌍 Environment: ${env.NODE_ENV}`);
+      logger.info(`TrustCart API running on port ${env.PORT}`);
+      logger.info(`API Docs: http://localhost:${env.PORT}/api/v1/docs`);
+      logger.info(`Health: http://localhost:${env.PORT}/api/v1/health`);
+      logger.info(`Environment: ${env.NODE_ENV}`);
     });
 
-    // Graceful shutdown
-    const shutdown = async (signal: string) => {
-      logger.info(`\n${signal} received. Shutting down gracefully...`);
+    connectRedis().catch((err) => {
+      logger.error('Redis background connection failed:', err);
+    });
 
+    const shutdown = async (signal: string) => {
+      logger.info(`${signal} received. Shutting down gracefully...`);
       server.close(async () => {
         logger.info('HTTP server closed');
         await disconnectDatabase();
         await disconnectRedis();
         process.exit(0);
       });
-
-      // Force exit after 10 seconds
       setTimeout(() => {
         logger.error('Forced shutdown after timeout');
         process.exit(1);
@@ -41,16 +36,13 @@ async function bootstrap() {
     process.on('SIGTERM', () => shutdown('SIGTERM'));
     process.on('SIGINT', () => shutdown('SIGINT'));
 
-    // Unhandled rejections
     process.on('unhandledRejection', (reason: any) => {
       logger.error('Unhandled Rejection:', reason);
     });
-
     process.on('uncaughtException', (error: Error) => {
       logger.error('Uncaught Exception:', error);
       process.exit(1);
     });
-
   } catch (error) {
     logger.error('Failed to bootstrap application:', error);
     process.exit(1);
