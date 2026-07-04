@@ -32,10 +32,15 @@ export async function authMiddleware(
     }
 
     // 2. Check Redis blacklist
-    const redis = getRedisClient();
-    const isBlacklisted = await redis.get(`auth:blacklist:${token}`);
-    if (isBlacklisted) {
-      throw new AuthError('Token has been invalidated. Please log in again.');
+     try {
+      const redis = getRedisClient();
+      const isBlacklisted = await redis.get(`auth:blacklist:${token}`);
+      if (isBlacklisted) {
+        throw new AuthError('Token has been invalidated. Please log in again.');
+      }
+    } catch (redisError) {
+      if (redisError instanceof AuthError) throw redisError;
+      console.error('Redis blacklist check failed (continuing):', redisError);
     }
 
     // 3. Verify JWT
