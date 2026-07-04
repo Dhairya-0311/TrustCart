@@ -1,4 +1,4 @@
-import { Response, NextFunction } from 'express';
+﻿import { Response, NextFunction } from 'express';
 import { AuthenticatedRequest } from '../types';
 import * as authService from '../services/auth.service';
 import { env } from '../config/env';
@@ -19,7 +19,7 @@ export async function register(
     res.cookie('__auth', result.token, {
       httpOnly: true,
       secure: env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      sameSite: env.NODE_ENV === 'production' ? 'none' : 'lax',
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 
@@ -48,7 +48,7 @@ export async function login(
     res.cookie('__auth', result.token, {
       httpOnly: true,
       secure: env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      sameSite: env.NODE_ENV === 'production' ? 'none' : 'lax',
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
@@ -143,7 +143,7 @@ export async function refreshToken(
     res.cookie('__auth', result.token, {
       httpOnly: true,
       secure: env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      sameSite: env.NODE_ENV === 'production' ? 'none' : 'lax',
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
