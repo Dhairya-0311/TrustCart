@@ -143790,18 +143790,18 @@ function getRedisClient() {
   if (!redis) {
     redis = new import_ioredis.default(env.REDIS_URL, {
       maxRetriesPerRequest: null,
-      // Required for BullMQ
       enableReadyCheck: false,
+      connectTimeout: 5e3,
       retryStrategy(times) {
-        const delay = Math.min(times * 50, 2e3);
-        return delay;
+        if (times > 5) return null;
+        return Math.min(times * 200, 2e3);
       }
     });
     redis.on("connect", () => {
-      console.log("\u2705 Redis connected successfully");
+      console.log("Redis connected successfully");
     });
     redis.on("error", (err) => {
-      console.error("\u274C Redis connection error:", err.message);
+      console.error("Redis connection error:", err.message);
     });
   }
   return redis;
@@ -143809,23 +143809,29 @@ function getRedisClient() {
 async function connectRedis() {
   const client = getRedisClient();
   try {
-    await client.ping();
-    console.log("\u2705 Redis ping successful");
+    await Promise.race([
+      client.ping(),
+      new Promise(
+        (_, reject) => setTimeout(() => reject(new Error("Redis ping timeout")), 5e3)
+      )
+    ]);
+    console.log("Redis ping successful");
   } catch (error) {
-    console.error("\u274C Redis connection failed:", error);
+    console.error("Redis connection failed (continuing without Redis):", error);
   }
 }
 async function disconnectRedis() {
   if (redis) {
     await redis.quit();
     redis = null;
-    console.log("\u{1F4E6} Redis disconnected");
+    console.log("Redis disconnected");
   }
 }
 function createBullMQConnection() {
   return new import_ioredis.default(env.REDIS_URL, {
     maxRetriesPerRequest: null,
-    enableReadyCheck: false
+    enableReadyCheck: false,
+    connectTimeout: 5e3
   });
 }
 
@@ -143950,7 +143956,7 @@ async function register2(req, res, next) {
     res.cookie("__auth", result.token, {
       httpOnly: true,
       secure: env.NODE_ENV === "production",
-      sameSite: "lax",
+      sameSite: env.NODE_ENV === "production" ? "none" : "lax",
       maxAge: 7 * 24 * 60 * 60 * 1e3
       // 7 days
     });
@@ -143969,7 +143975,7 @@ async function login2(req, res, next) {
     res.cookie("__auth", result.token, {
       httpOnly: true,
       secure: env.NODE_ENV === "production",
-      sameSite: "lax",
+      sameSite: env.NODE_ENV === "production" ? "none" : "lax",
       maxAge: 7 * 24 * 60 * 60 * 1e3
     });
     res.status(200).json({
@@ -144021,7 +144027,7 @@ async function refreshToken2(req, res, next) {
     res.cookie("__auth", result.token, {
       httpOnly: true,
       secure: env.NODE_ENV === "production",
-      sameSite: "lax",
+      sameSite: env.NODE_ENV === "production" ? "none" : "lax",
       maxAge: 7 * 24 * 60 * 60 * 1e3
     });
     res.status(200).json({
@@ -144047,10 +144053,15 @@ async function authMiddleware(req, _res, next) {
     if (!token) {
       throw new AuthError("Authentication required. Please log in.");
     }
-    const redis2 = getRedisClient();
-    const isBlacklisted = await redis2.get(`auth:blacklist:${token}`);
-    if (isBlacklisted) {
-      throw new AuthError("Token has been invalidated. Please log in again.");
+    try {
+      const redis2 = getRedisClient();
+      const isBlacklisted = await redis2.get(`auth:blacklist:${token}`);
+      if (isBlacklisted) {
+        throw new AuthError("Token has been invalidated. Please log in again.");
+      }
+    } catch (redisError) {
+      if (redisError instanceof AuthError) throw redisError;
+      console.error("Redis blacklist check failed (continuing):", redisError);
     }
     const decoded = import_jsonwebtoken2.default.verify(token, env.JWT_SECRET);
     req.user = {
@@ -144138,7 +144149,7 @@ var import_express2 = __toESM(require_express2());
 var import_bullmq = __toESM(require_cjs());
 var ANALYSIS_QUEUE_NAME = "analysis-queue";
 var analysisQueue = null;
-function getAnalysisQueue2() {
+function getAnalysisQueue() {
   if (!analysisQueue) {
     analysisQueue = new import_bullmq.Queue(ANALYSIS_QUEUE_NAME, {
       connection: createBullMQConnection(),
@@ -144191,7 +144202,7 @@ router2.get("/", async (_req, res) => {
     health.status = "degraded";
   }
   try {
-    const queue = getAnalysisQueue2();
+    const queue = getAnalysisQueue();
     const waiting = await queue.getWaitingCount();
     const active = await queue.getActiveCount();
     health.queue = `active: ${active}, waiting: ${waiting}`;
@@ -144750,16 +144761,17 @@ var app_default = app;
 async function bootstrap() {
   try {
     await connectDatabase();
-    await connectRedis();
     const server = app_default.listen(env.PORT, () => {
-      logger.info(`\u{1F680} TrustCart API running on port ${env.PORT}`);
-      logger.info(`\u{1F4DA} API Docs: http://localhost:${env.PORT}/api/v1/docs`);
-      logger.info(`\u{1F50D} Health: http://localhost:${env.PORT}/api/v1/health`);
-      logger.info(`\u{1F30D} Environment: ${env.NODE_ENV}`);
+      logger.info(`TrustCart API running on port ${env.PORT}`);
+      logger.info(`API Docs: http://localhost:${env.PORT}/api/v1/docs`);
+      logger.info(`Health: http://localhost:${env.PORT}/api/v1/health`);
+      logger.info(`Environment: ${env.NODE_ENV}`);
+    });
+    connectRedis().catch((err) => {
+      logger.error("Redis background connection failed:", err);
     });
     const shutdown = async (signal) => {
-      logger.info(`
-${signal} received. Shutting down gracefully...`);
+      logger.info(`${signal} received. Shutting down gracefully...`);
       server.close(async () => {
         logger.info("HTTP server closed");
         await disconnectDatabase();

@@ -1,3 +1,4 @@
+import { getAnalysisQueue } from '../config/queue';
 import { prisma } from '../config/database';
 import { getRedisClient } from '../config/redis';
 import { detectPlatform } from '../utils/platformDetector';
@@ -48,6 +49,7 @@ export async function createAnalysis(userId: string, url: string) {
   });
 
   // Enqueue BullMQ job
+  
   const queue = getAnalysisQueue();
   const job = await queue.add(
     'analyze-product',
