@@ -1,4 +1,5 @@
-﻿import app from './app';
+﻿
+import app from './app';
 import { env } from './config/env';
 import { connectDatabase, disconnectDatabase } from './config/database';
 import { connectRedis, disconnectRedis } from './config/redis';
@@ -17,6 +18,10 @@ async function bootstrap() {
 
     connectRedis().catch((err) => {
       logger.error('Redis background connection failed:', err);
+    });
+
+    import('./workers/analysis.worker').catch((err) => {
+      logger.error('Failed to start worker:', err);
     });
 
     const shutdown = async (signal: string) => {
