@@ -173492,7 +173492,7 @@ var init_seller_service = __esm({
     path = __toESM(require("path"));
     flaggedSellers = [];
     try {
-      const filePath = path.join(__dirname, "..", "..", "data", "flagged-sellers.json");
+      const filePath = path.join(process.cwd(), "data", "flagged-sellers.json");
       flaggedSellers = JSON.parse(fs.readFileSync(filePath, "utf-8"));
     } catch (err) {
       logger.warn("Could not load flagged sellers file:", err);
