@@ -176085,7 +176085,7 @@ var alert_routes_default = router4;
 var app = (0, import_express5.default)();
 app.use(helmet());
 app.use((0, import_cors.default)({
-  origin: env.FRONTEND_URL,
+  origin: true,
   credentials: true,
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]

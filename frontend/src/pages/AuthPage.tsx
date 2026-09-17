@@ -30,7 +30,7 @@ export default function AuthPage() {
       navigate('/dashboard');
     } catch (err: any) {
       const responseData = err?.response?.data;
-      let errMsg = responseData?.error || 'Something went wrong';
+      let errMsg = responseData?.error || err?.message || 'Something went wrong';
       if (responseData?.details && Array.isArray(responseData.details)) {
         const detailMsgs = responseData.details.map((d: any) => d.message).join(', ');
         if (detailMsgs) {
